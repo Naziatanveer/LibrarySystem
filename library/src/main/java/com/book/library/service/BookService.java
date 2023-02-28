@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.book.library.database.BookRepository;
 import com.book.library.model.Book;
+import com.book.library.model.BookRecords;
 
 
 
@@ -17,9 +18,13 @@ public class BookService {
 	@Autowired
 	BookRepository bookRepo;
 	
+	@Autowired
+	BookRecordsService bookRecordsService;
+	
 	public void addBook(Book book) {
 		
-		bookRepo.save(book);		
+		bookRepo.save(book);
+		//bookRecordsService.incrementBookCount(book);
 	}
 	
 	public List<Book> sendAllBooks(){

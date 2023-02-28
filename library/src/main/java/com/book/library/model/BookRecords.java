@@ -1,5 +1,8 @@
 package com.book.library.model;
 
+
+import org.springframework.context.annotation.Configuration;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
@@ -9,7 +12,6 @@ public class BookRecords {
 	@Id
 	private long bookId;
 	private int bookCount;
-	private String bookName;
 	
 	
 	public long getBookId() {
@@ -23,15 +25,7 @@ public class BookRecords {
 	}
 	public void setBookCount(int bookCount) {
 		this.bookCount = bookCount;
-	}
-	public String getBookName() {
-		return bookName;
-	}
-	public void setBookName(String bookName) {
-		this.bookName = bookName;
-	}
-	
-	
+	}	
 	
 
 }

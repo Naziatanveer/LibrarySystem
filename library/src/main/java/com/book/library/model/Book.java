@@ -1,9 +1,12 @@
 package com.book.library.model;
 
+
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Transient;
 
 @Entity
 public class Book {
@@ -14,6 +17,8 @@ public class Book {
 	private String bookName;
 	private String bookAuthor;
 	private String category;
+	@Transient
+	private int count;
 	
 	
 	public long getBookId() {
@@ -40,8 +45,12 @@ public class Book {
 	public void setCategory(String category) {
 		this.category = category;
 	}
-	
-	
+	public int getCount() {
+		return count;
+	}
+	public void setCount(int count) {
+		this.count = count;
+	}
 	
 
 }
