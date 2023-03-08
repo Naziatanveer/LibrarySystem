@@ -1,8 +1,6 @@
 package com.book.library.model;
 
 
-import org.springframework.context.annotation.Configuration;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 

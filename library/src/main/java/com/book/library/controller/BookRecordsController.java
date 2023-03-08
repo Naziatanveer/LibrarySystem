@@ -22,9 +22,15 @@ public class BookRecordsController {
 	BookRecordsService recordsService;
 	
 	@PostMapping(path="/addBookRecords", produces = "application/json")
-	BookRecords addBookRecords(@RequestBody BookRecords bookRecord) {
-		recordsService.incrementBookCount(bookRecord);
-		return bookRecord;
+	BookRecords addBookRecords(@RequestBody Long bookId, int count) {
+		return recordsService.incrementBookCount(bookId,count);
+		
+	}
+	
+	@PostMapping(path="/returnBookRecords", produces = "application/json")
+	BookRecords returnBookRecords(@RequestBody Long bookId, int count) {
+		return recordsService.decrementBookCount(bookId, count);
+		
 	}
 	
 	@GetMapping(path="/getBookRecords", produces = "application/json")

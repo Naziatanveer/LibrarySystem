@@ -11,6 +11,11 @@ import com.book.library.model.BookUser;
 
 @Repository
 public interface UserRepository extends CrudRepository<BookUser, String>{
-	@Query(value= "Select * from book_user u WHERE u.user_id= :userId and u.book_id= :bookId", nativeQuery = true)
+	@Query(value= "Select * from book_user u WHERE u.user_id= :userId and u.book_id= :bookId ORDER BY date DESC LIMIT 1", nativeQuery = true)
 	List<BookUser> findBookUser(@Param("userId") Long userId, @Param("bookId") Long bookId);
+	
+	
+	@Query(value= "Select u.is_book_returned from book_user u WHERE u.user_id= :userId and u.book_id= :bookId ORDER BY date DESC LIMIT 1", nativeQuery = true)
+	Boolean findBookStatus(@Param("userId") Long userId, @Param("bookId") Long bookId);
+	
 }
