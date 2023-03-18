@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.book.library.database.BookRecordsRepository;
 import com.book.library.database.BookRepository;
 import com.book.library.model.Book;
 import com.book.library.model.BookRecords;
@@ -19,12 +20,24 @@ public class BookService {
 	BookRepository bookRepo;
 	
 	@Autowired
+	BookRecordsRepository bookRecRepo;
+	
+	BookRecords record =new BookRecords();
+	
+	@Autowired
 	BookRecordsService bookRecordsService;
 	
-	public void addBook(Book book) {
+	public void addNewBook(Book book) {
 		
 		bookRepo.save(book);
-		//bookRecordsService.incrementBookCount(book);
+		record.setBookId(book.getBookId());
+		record.setBookCount(20);
+		bookRecRepo.save(record);
+	}
+	public void addExisitingBook(BookRecords bookRecord)
+	{
+		System.out.println(bookRecord.getBookId()+ " Book detal "+bookRecord.getBookCount());
+		bookRecordsService.incrementBookCount(bookRecord.getBookId(),bookRecord.getBookCount());
 	}
 	
 	public List<Book> sendAllBooks(){
@@ -32,12 +45,12 @@ public class BookService {
 		return (List<Book>) bookRepo.findAll();
 	}
 	
-	public Optional<Book> getBookByID(Long id) {
+	public Optional<Book> getBookByID(long id) {
 		
 		return bookRepo.findById(id);
 	}
 	
-	public void deleteBookByID(Long id) {
+	public void deleteBookByID(long id) {
 		
 		bookRepo.deleteById(id);
 	}

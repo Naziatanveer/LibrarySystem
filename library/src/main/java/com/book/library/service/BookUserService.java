@@ -1,11 +1,8 @@
 package com.book.library.service;
 
-import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
-import org.hibernate.internal.build.AllowSysOut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,43 +14,53 @@ import com.book.library.model.BookUser;
 public class BookUserService {
 	@Autowired
 	UserRepository userRepo;
-	
-	Utilities ut=new Utilities();
-	
+	@Autowired
+	BookRecordsService bookRecordsService;
+
+	Utilities ut = new Utilities();
+
 	@Autowired
 	BookUser user;
-	
+
 	public void addBookUser(BookUser user) {
-		
-		user.setTransactionId(ut.getTransactionId());
-		user.setDate(new Date(System.currentTimeMillis()));
-		user.setBookReturned(true);
-		userRepo.save(user);
-		
-	}
-	public void returnBookUser(BookUser user)
-	{
-		if(userRepo.findBookUser(user.getUserId(),user.getBookId())!=null)
-		{
+
+		if (userRepo.findBookUser(user.getUserId(), user.getBookId()).isEmpty()
+				|| userRepo.findBookStatus(user.getUserId(), user.getBookId()) == true) {
 			user.setTransactionId(ut.getTransactionId());
-			user.setDate(new Date(System.currentTimeMillis()));
+			user.setDate(ut.getDateTime());
 			user.setBookReturned(false);
 			userRepo.save(user);
+			bookRecordsService.decrementBookCount(user.getBookId(), 1);
+		} else {
+			System.out.println("Book can not be taken");
 		}
-	
+
 	}
-	
-	public Optional<BookUser> getUserById(String transactionId){
+
+	public void returnBookUser(BookUser user) {
+		if (userRepo.findBookUser(user.getUserId(), user.getBookId()) != null
+				&& userRepo.findBookStatus(user.getUserId(), user.getBookId()) == false) {
+			user.setTransactionId(ut.getTransactionId());
+			user.setDate(ut.getDateTime());
+			user.setBookReturned(true);
+			userRepo.save(user);
+			bookRecordsService.incrementBookCount(user.getBookId(), 1);
+		} else {
+			System.out.println("Book can not be returned");
+		}
+
+	}
+
+	public Optional<BookUser> getUserById(String transactionId) {
 		return userRepo.findById(transactionId);
 	}
-	
-	
+
 	public void addBulkBookUsers(List<BookUser> listOfUsers) {
-		
-		for(BookUser b: listOfUsers) {
+
+		for (BookUser b : listOfUsers) {
 			b.setTransactionId(ut.getTransactionId());
 			userRepo.save(b);
 		}
-		
+
 	}
 }
